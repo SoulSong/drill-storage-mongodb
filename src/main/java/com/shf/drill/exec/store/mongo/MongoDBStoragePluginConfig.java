@@ -8,6 +8,7 @@ import org.apache.drill.common.logical.StoragePluginConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 /**
@@ -24,8 +25,8 @@ public class MongoDBStoragePluginConfig extends StoragePluginConfig {
     private String connections;
 
     @JsonCreator
-    public MongoDBStoragePluginConfig(@JsonProperty("mode") String mode,
-                                      @JsonProperty("connections") String connections) {
+    public MongoDBStoragePluginConfig(@JsonProperty("mode") @NotNull String mode,
+                                      @JsonProperty("connections") @NotNull String connections) {
         LOGGER.info("Initialize MongoDBStoragePluginConfig by the {} mode with {}.", mode, connections);
         this.connections = connections;
         this.mode = mode;

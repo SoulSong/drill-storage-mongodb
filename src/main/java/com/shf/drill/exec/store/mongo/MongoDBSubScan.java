@@ -8,16 +8,12 @@ import org.apache.drill.exec.physical.base.PhysicalVisitor;
 import org.apache.drill.exec.physical.base.SubScan;
 import org.apache.drill.exec.proto.UserBitShared;
 import org.apache.drill.shaded.guava.com.google.common.base.Preconditions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 public class MongoDBSubScan extends AbstractBase implements SubScan {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MongoDBSubScan.class);
-
     private MongoDBScanSpec scanSpec;
     private MongoDBStoragePluginConfig config;
     private List<SchemaPath> columns;
