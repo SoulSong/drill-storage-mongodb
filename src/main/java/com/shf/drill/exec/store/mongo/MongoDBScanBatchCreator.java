@@ -30,8 +30,6 @@ public class MongoDBScanBatchCreator implements BatchCreator<MongoDBSubScan> {
                                          List<RecordBatch> children) throws ExecutionSetupException {
         Preconditions.checkArgument(children.isEmpty());
         List<RecordReader> readers = Lists.newArrayList();
-        LOGGER.info("MongoDBScanBatchCreator columns : {}", config.getColumns().size());
-        LOGGER.info("mql : {}", config.getScanSpec().getMql());
         List<SchemaPath> columns = config.getColumns() == null ? GroupScan.ALL_COLUMNS : config.getColumns();
         readers.add(new MongoDBRecordReader(context, config, columns));
         return new ScanBatch(config, context, readers);

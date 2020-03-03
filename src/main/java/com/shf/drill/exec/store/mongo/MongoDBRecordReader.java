@@ -7,7 +7,10 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.drill.common.exceptions.ExecutionSetupException;
+import org.apache.drill.common.exceptions.UserException;
 import org.apache.drill.common.expression.SchemaPath;
 import org.apache.drill.exec.ops.FragmentContext;
 import org.apache.drill.exec.ops.OperatorContext;
@@ -21,10 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.IntStream;
 
 import static org.apache.drill.common.expression.SchemaPath.STAR_COLUMN;
@@ -43,34 +43,30 @@ public class MongoDBRecordReader extends AbstractRecordReader {
     private ObjectMapper objectMapper = new ObjectMapper();
     private Iterator iterator;
     private MongoClient mongoClient;
-//    private MongoDBScanSpec.Spec spec;
+    private MongoDBScanSpec.Spec spec;
 
     public MongoDBRecordReader(FragmentContext fragmentContext, MongoDBSubScan subScan, List<SchemaPath> projectedColumns) {
         this.fragmentContext = fragmentContext;
         this.subScan = subScan;
-        LOGGER.info("mql : {}", subScan.getScanSpec().getMql());
         // 此设置将影响jsonReader构造的返回体projection，即使select * 也仅包含如下设置列
-//        spec = subScan.getScanSpec().getSpec();
-//        if (null == spec) {
-//            throw UserException
-//                    .validationError()
-//                    .message(
-//                            "spec must not be null.")
-//                    .addContext("Mql", subScan.getScanSpec().getMql())
-//                    .addContext("Plugin", subScan.getConfig().getPluginName())
-//                    .build(LOGGER);
-//        }
-//        String projection = spec.getProjection();
-//        if (StringUtils.isNotEmpty(projection)) {
-//            final List<SchemaPath> newProjectedColumns = new ArrayList<>();
-//            Arrays.asList(projection.split(",")).forEach(projectColumn -> newProjectedColumns.add(SchemaPath.getSimplePath(projectColumn)));
-//            setColumns(newProjectedColumns);
-//        } else {
-//            setColumns(projectedColumns);
-//        }
-        Set<SchemaPath> transformed = Sets.newLinkedHashSet();
-        transformed.add(STAR_COLUMN);
-        setColumns(projectedColumns);
+        spec = subScan.getScanSpec().getSpec();
+        if (null == spec) {
+            throw UserException
+                    .validationError()
+                    .message(
+                            "spec must not be null.")
+                    .addContext("Mql", subScan.getScanSpec().getMql())
+                    .addContext("Plugin", subScan.getConfig().getPluginName())
+                    .build(LOGGER);
+        }
+        String projection = spec.getProjection();
+        if (StringUtils.isNotEmpty(projection)) {
+            final List<SchemaPath> newProjectedColumns = new ArrayList<>();
+            Arrays.asList(projection.split(",")).forEach(projectColumn -> newProjectedColumns.add(SchemaPath.getSimplePath(projectColumn)));
+            setColumns(newProjectedColumns);
+        } else {
+            setColumns(projectedColumns);
+        }
     }
 
     private void init() {
@@ -93,15 +89,15 @@ public class MongoDBRecordReader extends AbstractRecordReader {
                 .enableEscapeAnyChar(false)
                 .build();
 
-//        if (null == spec.getDbName() || null == spec.getCollectionName() || CollectionUtils.isEmpty(spec.getAggs())) {
-//            throw UserException
-//                    .validationError()
-//                    .message(
-//                            "dbName and collectionName and aggs all must not be null.")
-//                    .addContext("Mql", subScan.getScanSpec().getMql())
-//                    .addContext("Plugin", subScan.getConfig().getPluginName())
-//                    .build(LOGGER);
-//        }
+        if (null == spec.getDbName() || null == spec.getCollectionName() || CollectionUtils.isEmpty(spec.getAggs())) {
+            throw UserException
+                    .validationError()
+                    .message(
+                            "dbName and collectionName and aggs all must not be null.")
+                    .addContext("Mql", subScan.getScanSpec().getMql())
+                    .addContext("Plugin", subScan.getConfig().getPluginName())
+                    .build(LOGGER);
+        }
 
 //        AggregateIterable<Document> iterable = mongoClient.getDatabase(spec.getDbName()).getCollection(spec.getCollectionName()).aggregate(spec.getAggs()).allowDiskUse(true);
 
