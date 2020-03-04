@@ -13,6 +13,12 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * description :
+ *
+ * @author songhaifeng
+ * @date 2020/2/28 22:01
+ */
 public class MongoDBSubScan extends AbstractBase implements SubScan {
     private MongoDBScanSpec scanSpec;
     private MongoDBStoragePluginConfig config;

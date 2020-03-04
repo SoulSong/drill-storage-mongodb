@@ -15,6 +15,7 @@ import java.util.Objects;
  * 插件配置信息，可通过web控制台的storage配置TAB
  *
  * @author songhaifeng
+ * @date 2020/2/28 22:01
  */
 @JsonTypeName(MongoDBStoragePluginConfig.NAME)
 public class MongoDBStoragePluginConfig extends StoragePluginConfig {

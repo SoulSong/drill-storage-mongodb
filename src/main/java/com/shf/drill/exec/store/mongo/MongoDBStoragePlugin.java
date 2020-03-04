@@ -14,6 +14,10 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
+/**
+ * @author songhaifeng
+ * @date 2020/2/28 22:01
+ */
 public class MongoDBStoragePlugin extends AbstractStoragePlugin {
     private static final Logger LOGGER = LoggerFactory.getLogger(MongoDBStoragePlugin.class);
 

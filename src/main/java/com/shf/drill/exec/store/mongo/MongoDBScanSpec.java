@@ -9,6 +9,12 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * description :
+ *
+ * @author songhaifeng
+ * @date 2020/2/28 22:01
+ */
 public class MongoDBScanSpec {
     private static final Logger LOGGER = LoggerFactory.getLogger(MongoDBScanSpec.class);
 
@@ -33,8 +39,10 @@ public class MongoDBScanSpec {
         try {
             spec = new ObjectMapper().readValue(this.mql, Spec.class);
         } catch (IOException e) {
-            LOGGER.error("parse mql error : {}", e.getMessage());
-            e.printStackTrace();
+            if (!MongoDBSchemaFactory.PLACEHOLDER_TABLE.equals(this.mql)) {
+                LOGGER.error("parse mql error : {}", e.getMessage());
+                e.printStackTrace();
+            }
         }
     }
 

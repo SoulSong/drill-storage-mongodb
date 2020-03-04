@@ -14,9 +14,16 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.Set;
 
+/**
+ * description :
+ *
+ * @author songhaifeng
+ * @date 2020/2/28 22:01
+ */
 public class MongoDBSchemaFactory extends AbstractSchemaFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(MongoDBSchemaFactory.class);
 
+    public static final String PLACEHOLDER_TABLE = "PLACEHOLDER_TABLE";
     private MongoDBStoragePlugin plugin;
 
     public MongoDBSchemaFactory(String schemaName, MongoDBStoragePlugin plugin) {
@@ -35,8 +42,8 @@ public class MongoDBSchemaFactory extends AbstractSchemaFactory {
         private Set<String> tableNames = Sets.newHashSet();
 
         public MongoDBSchema(String name) {
-            super(ImmutableList.<String>of(), name);
-            tableNames.add("static");
+            super(ImmutableList.of(), name);
+            tableNames.add(PLACEHOLDER_TABLE);
         }
 
         @Override

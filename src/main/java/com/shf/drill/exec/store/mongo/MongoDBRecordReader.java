@@ -29,6 +29,12 @@ import java.util.stream.Collectors;
 
 import static org.apache.drill.exec.vector.BaseValueVector.INITIAL_VALUE_ALLOCATION;
 
+/**
+ * description :
+ *
+ * @author songhaifeng
+ * @date 2020/2/28 22:01
+ */
 public class MongoDBRecordReader extends AbstractRecordReader {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MongoDBRecordReader.class);
@@ -45,7 +51,6 @@ public class MongoDBRecordReader extends AbstractRecordReader {
     public MongoDBRecordReader(FragmentContext fragmentContext, MongoDBSubScan subScan, List<SchemaPath> projectedColumns) {
         this.fragmentContext = fragmentContext;
         this.subScan = subScan;
-        // 此设置将影响jsonReader构造的返回体projection，即使select * 也仅包含如下设置列
         spec = subScan.getScanSpec().getSpec();
         if (null == spec) {
             throw UserException
@@ -56,6 +61,8 @@ public class MongoDBRecordReader extends AbstractRecordReader {
                     .addContext("Plugin", subScan.getConfig().getPluginName())
                     .build(LOGGER);
         }
+
+        // 此设置将影响jsonReader构造的返回体projection，即使select * 也仅包含如下设置列
         String projection = spec.getProjection();
         if (StringUtils.isNotEmpty(projection)) {
             final List<SchemaPath> newProjectedColumns = new ArrayList<>();

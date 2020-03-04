@@ -10,6 +10,12 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+/**
+ * description :
+ *
+ * @author songhaifeng
+ * @date 2020/2/28 22:01
+ */
 public class MongoDBGroupScan extends AbstractGroupScan {
     private static final Logger LOGGER = LoggerFactory.getLogger(MongoDBGroupScan.class);
 
